@@ -1,9 +1,12 @@
 name = "ai-img-engine"
 main = "src/index.js"
 compatibility_date = "2024-02-24"
-workers_dev = true
+workers_dev = false
 account_id = "" # INSERT VALUE
 compatibility_flags = [ "nodejs_compat" ]
+
+[placement]
+mode = "smart"
 
 [[routes]]
 pattern = "ai.tomaskrcal.cloud"
