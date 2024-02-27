@@ -89,7 +89,7 @@ async function getChatResponse(req: RouterRequest<ExtReq>, env: Env): Promise<Re
 	let string = ``
 
 	for (const item of results) {
-		string += `I Said: ${item['input']} and you answered: ${item['output']}`
+		string += ` I Said: ${item['input']} and you answered: ${item['output']},`
 	}
 
 	const chat = {
