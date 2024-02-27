@@ -1,77 +1,48 @@
-import { useState } from 'preact/hooks';
-import { Button, CircularProgress, Container, Input, ThemeProvider, Typography } from '@mui/material';
 import './app.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme.ts';
-import apiClient from './api';
 import { JSX } from 'preact';
-import { v4 as uuidv4 } from 'uuid'
+import { AppBar, Box, Link as MLink, ThemeProvider, Toolbar, Typography } from '@mui/material';
+import Router from 'preact-router';
+import { Home } from './pages/Home';
+import { Chat } from './pages/Chat';
+import { useState } from 'preact/hooks';
+import { v4 as uuidv4 } from 'uuid';
+import AsyncRoute from 'preact-async-route';
 
 export function App(): JSX.Element {
-	const [id] = useState(uuidv4())
-	const [input, setInput] = useState('');
-	const [img, setImg] = useState<string | null>(null);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [generateLoading, setGenerateLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string>('');
+	const [id] = useState(uuidv4());
 
-	const handleSubmit = async (e: JSX.TargetedSubmitEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setImg(null);
-		try {
-			setLoading(true);
-			setError('');
-			const { data } = await apiClient.get('/image', { params: { query: input }, headers: { 'X-Chat-Id': id }, responseType: 'blob' });
-			const imageObjectURL = URL.createObjectURL(data);
-			setImg(imageObjectURL);
-		} catch (err: unknown) {
-			if (err) {
-				setError(err.toString());
-			}
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleGenerate = async (): Promise<void> => {
-		try {
-			setGenerateLoading(true);
-			const { data } = await apiClient.post<{
-				response: string
-			}>('/chat', { input: 'Give me a topic in one simple sentence that could be interesting for AI generated images, it can be weird or sometimes a little unsetelling' }, { headers: { 'X-Chat-Id': id } });
-			setGenerateLoading(false);
-			setInput(data.response);
-		} catch (e) {
-			console.error(e)
-		} finally {
-			setGenerateLoading(false);
-		}
-	};
-
-	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<Container>
-				<form onSubmit={(e) => handleSubmit(e)}>
-					<Input fullWidth color="primary" value={input} onChange={e => setInput(e.currentTarget.value)} />
-					<Button disabled={input === ''} type="submit" loading="eager">
-						{loading && <>
-							<Typography as="span" sx={{ mr: 1 }}>Načítání</Typography>
-							<CircularProgress size={15} indeterminate />
-						</>}
-						{!loading && <Typography>Generovat</Typography>}
-					</Button>
-
-					<Button onClick={handleGenerate} type="button" loading="eager">
-						<Typography>Doporučit</Typography>
-						{generateLoading && <CircularProgress sx={{ ml: 1 }} size={15} indeterminate />}
-					</Button>
-				</form>
-
-				{error && <Typography color="red">{error}</Typography>}
-
-				{img && <img style={{ width: '100%' }} src={img} alt={input} />}
-			</Container>
-		</ThemeProvider>
-	);
+	return <ThemeProvider theme={theme}>
+		<CssBaseline />
+		<AppBar>
+			<Toolbar>
+				<Typography
+					variant="h6"
+					as="div"
+					sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+				>
+					AI
+				</Typography>
+				<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+					<MLink sx={{ mr: 2 }} href="/">
+						Domů
+					</MLink>
+					<MLink href="/chat">
+						Chat
+					</MLink>
+				</Box>
+			</Toolbar>
+		</AppBar>
+		<Box component="main" sx={{ p: 3, mt: 8 }}>
+			<Router>
+				<Home path="/" />
+				<AsyncRoute
+					path="/chat"
+					component={Chat}
+					id={id}
+				/>
+			</Router>
+		</Box>
+	</ThemeProvider>;
 }

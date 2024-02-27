@@ -94,7 +94,7 @@ async function getChatResponse(req: RouterRequest<ExtReq>, env: Env): Promise<Re
 
 	const chat = {
 		messages: [
-			{ role: 'system', content: 'You are a helpful assistant.' },
+			{ role: 'system', content: 'You are a assistant.' },
 			{ role: 'system', content: `You remember our conversation based on this text: ${string}.` },
 			{ role: 'user', content: body.input },
 		],
