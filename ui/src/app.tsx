@@ -10,15 +10,16 @@ export function App() {
 	const [input, setInput] = useState('');
 	const [img, setImg] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
+	const [generateLoading, setGenerateLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
 
 	const handleSubmit = async (e: JSX.TargetedSubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setImg(null)
+		setImg(null);
 		try {
 			setLoading(true);
 			setError('');
-			const { data } = await apiClient.get('/', { params: { query: input }, responseType: 'blob' });
+			const { data } = await apiClient.get('/image', { params: { query: input }, responseType: 'blob' });
 			const imageObjectURL = URL.createObjectURL(data);
 			setImg(imageObjectURL);
 		} catch (err: unknown) {
@@ -27,6 +28,21 @@ export function App() {
 			}
 		} finally {
 			setLoading(false);
+		}
+	};
+
+	const handleGenerate = async (): Promise<void> => {
+		try {
+			setGenerateLoading(true);
+			const { data } = await apiClient.post<{
+				response: string
+			}>('/chat', { input: 'Give me a topic in one simple sentence that could be interesting for AI generated images, it can be weird or sometimes a little unsetelling' });
+			setGenerateLoading(false);
+			setInput(data.response);
+		} catch (e) {
+			console.error(e)
+		} finally {
+			setGenerateLoading(false);
 		}
 	};
 
@@ -42,6 +58,11 @@ export function App() {
 							<CircularProgress size={15} indeterminate />
 						</>}
 						{!loading && <Typography>Generovat</Typography>}
+					</Button>
+
+					<Button onClick={handleGenerate} type="button" loading="eager">
+						<Typography>Doporučit</Typography>
+						{generateLoading && <CircularProgress sx={{ ml: 1 }} size={15} indeterminate />}
 					</Button>
 				</form>
 
