@@ -1,11 +1,25 @@
 import { Ai } from './vendor/@cloudflare/ai.js';
 import { v4 as uuidv4 } from 'uuid';
+import { Router } from '@tsndr/cloudflare-worker-router';
 
-let responses = [];
+const corsHeaders = {
+	'Access-Control-Allow-Origin': '*',
+	'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
+	'Access-Control-Max-Age': '86400'
+};
+
+const router = new Router();
+
+router.cors();
+
+// Post route with url parameter
+router.get('/api/image', ({ req, env }) => {
+	return getImage(req, env)
+})
 
 export default {
-	async fetch(request, env) {
-		return await getImage(request, env);
+	async fetch(request, env, ctx) {
+		return router.handle(request, env, ctx)
 	}
 };
 
@@ -28,20 +42,23 @@ async function getImage(req, env) {
 
 	const res = new Response(response, {
 		headers: {
+			...corsHeaders,
 			'content-type': 'image/png'
 		}
 	});
 
-	const s3Id = uuidv4()
+	const s3Id = uuidv4();
 	// Save to S3
 	await s3.put(s3Id, await res.clone().blob());
 	// Save to DB
-	await db.prepare('INSERT INTO images (s3Id, query, createdAt) VALUES (?1, ?2, ?3)').bind(s3Id, inputs.prompt, new Date().toISOString()).run()
+	await db.prepare('INSERT INTO images (s3Id, query, createdAt) VALUES (?1, ?2, ?3)').bind(s3Id, inputs.prompt, new Date().toISOString()).run();
 
 	return res;
 }
 
 async function getRPGChat(req, env) {
+	let responses = [];
+
 	const ai = new Ai(env.AI);
 
 	// messages - chat style input
@@ -63,7 +80,6 @@ async function getRPGChat(req, env) {
 			{ role: 'user', content: '' }
 		]
 	};
-	console.log(responses);
 	let response = await ai.run('@hf/thebloke/llama-2-13b-chat-awq', chat);
 	return Response.json({ response });
 }

@@ -3,14 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev --remote",
-    "start": "wrangler dev"
+    "deploy": "wrangler deploy -c ./wrangler.prod.toml",
+    "dev": "wrangler dev --remote -c ./wrangler.toml",
+    "start": "wrangler dev",
+    "migrate": "npx wrangler d1 execute prod-img-engine --file=./migrations/01.sql"
   },
   "devDependencies": {
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@tsndr/cloudflare-worker-router": "^3.2.4",
     "uuid": "^9.0.1"
   }
 }

@@ -14,6 +14,7 @@ export function App() {
 
 	const handleSubmit = async (e: JSX.TargetedSubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setImg(null)
 		try {
 			setLoading(true);
 			setError('');

@@ -2,7 +2,7 @@ name = "ai-img-engine"
 main = "src/index.js"
 compatibility_date = "2024-02-24"
 workers_dev = true
-account_id = "d3451b99dacd0d2c4bc99281390107fa"
+account_id = "" # INSERT VALUE
 compatibility_flags = [ "nodejs_compat" ]
 
 [[routes]]
@@ -15,8 +15,8 @@ binding = "AI"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "prod-img-engine"
-database_id = "22339285-0d15-4735-82ec-71be88ccb0d5"
+database_name = "" # INSERT VALUE
+database_id = "" # INSERT VALUE
 
 [[r2_buckets]]
 binding = "S3"
