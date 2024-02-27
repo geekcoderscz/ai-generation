@@ -79,17 +79,33 @@ async function getImage(req: RouterRequest<ExtReq>, env: Env): Promise<Response>
 
 async function getChatResponse(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {
 	const ai = new Ai(env.AI)
+	const db = env.DB
+	const chatId = req.headers.get('x-chat-id') || ''
 
 	const body = JSON.parse(await readRequestBody(req.raw))
+
+	const { results } = await db.prepare('SELECT input, output FROM chat WHERE chatId = ?1').bind(chatId).all()
+
+	let string = ``
+
+	for (const item of results) {
+		string += `I Said: ${item['input']} and you answered: ${item['output']}`
+	}
 
 	const chat = {
 		messages: [
 			{ role: 'system', content: 'You are a helpful assistant.' },
+			{ role: 'system', content: `You remember our conversation based on this text: ${string}.` },
 			{ role: 'user', content: body.input },
 		],
 	}
-	const response = await ai.run('@hf/thebloke/llama-2-13b-chat-awq', chat)
-	return Response.json(response, { headers: { 'content-type': 'application/json' } })
+
+	const { response } = await ai.run('@hf/thebloke/llama-2-13b-chat-awq', chat)
+	await db
+		.prepare('INSERT INTO chat (chatId, input, output, createdAt) VALUES (?1, ?2, ?3, ?4)')
+		.bind(chatId, body.input, response, new Date().toISOString())
+		.run()
+	return Response.json({ response }, { headers: { 'content-type': 'application/json' } })
 }
 //
 // async function getRPGChat(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {

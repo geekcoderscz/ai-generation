@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS chat;
+CREATE TABLE IF NOT EXISTS chat (id INTEGER PRIMARY KEY, chatId TEXT, input TEXT, output TEXT, createdAt TEXT);

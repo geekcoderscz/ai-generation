@@ -8,7 +8,7 @@
 		"start": "wrangler dev src/index.ts",
 		"format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
 		"lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
-		"migrate": "npx wrangler d1 execute prod-img-engine --file=./migrations/01.sql"
+		"migrate": "npx wrangler d1 execute prod-img-engine --file=./migrations/$1"
 	},
 	"eslintConfig": {
 		"root": true,

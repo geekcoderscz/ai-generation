@@ -5,8 +5,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme.ts';
 import apiClient from './api';
 import { JSX } from 'preact';
+import { v4 as uuidv4 } from 'uuid'
 
-export function App() {
+export function App(): JSX.Element {
+	const [id] = useState(uuidv4())
 	const [input, setInput] = useState('');
 	const [img, setImg] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -19,7 +21,7 @@ export function App() {
 		try {
 			setLoading(true);
 			setError('');
-			const { data } = await apiClient.get('/image', { params: { query: input }, responseType: 'blob' });
+			const { data } = await apiClient.get('/image', { params: { query: input }, headers: { 'X-Chat-Id': id }, responseType: 'blob' });
 			const imageObjectURL = URL.createObjectURL(data);
 			setImg(imageObjectURL);
 		} catch (err: unknown) {
@@ -36,7 +38,7 @@ export function App() {
 			setGenerateLoading(true);
 			const { data } = await apiClient.post<{
 				response: string
-			}>('/chat', { input: 'Give me a topic in one simple sentence that could be interesting for AI generated images, it can be weird or sometimes a little unsetelling' });
+			}>('/chat', { input: 'Give me a topic in one simple sentence that could be interesting for AI generated images, it can be weird or sometimes a little unsetelling' }, { headers: { 'X-Chat-Id': id } });
 			setGenerateLoading(false);
 			setInput(data.response);
 		} catch (e) {
