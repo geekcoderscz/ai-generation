@@ -20,11 +20,11 @@ export function App(): JSX.Element {
 				<Typography
 					variant="h6"
 					as="div"
-					sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+					sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
 				>
 					AI
 				</Typography>
-				<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+				<Box sx={{ display: { xs: 'block', sm: 'block' } }}>
 					<MLink sx={{ mr: 2 }} href="/">
 						Domů
 					</MLink>
@@ -34,7 +34,7 @@ export function App(): JSX.Element {
 				</Box>
 			</Toolbar>
 		</AppBar>
-		<Box component="main" sx={{ p: 3, mt: 8 }}>
+		<Box component="main" sx={{ mt: 8 }}>
 			<Router>
 				<Home path="/" />
 				<AsyncRoute
