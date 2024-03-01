@@ -8,8 +8,8 @@ interface MessageI {
 	owner: 'me' | 'other';
 }
 
-export const Chat = (props: { id: string, path: string }) => {
-	const { id } = props;
+export const Chat = (props: { id: string, path: string, advanced: boolean }) => {
+	const { id, advanced } = props;
 	const [input, setInput] = useState('');
 	const [chat, setChat] = useState<MessageI[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -25,7 +25,7 @@ export const Chat = (props: { id: string, path: string }) => {
 			setChat(chat => [...chat, msg]);
 			const { data } = await apiClient.post<{
 				response: string
-			}>('/chat', { input: input }, { headers: { 'X-Chat-Id': id } });
+			}>('/chat', { input: input }, { headers: { 'X-Chat-Id': id, 'X-Advanced': advanced ? 1 : 0 }, });
 			const msgResponse: MessageI = {
 				msg: data.response,
 				owner: 'other'
@@ -57,7 +57,8 @@ export const Chat = (props: { id: string, path: string }) => {
 			</Paper>}
 
 			<form onSubmit={askChat}>
-				<Input sx={{ mt: 4 }} fullWidth color="primary" value={input} onChange={e => setInput(e.currentTarget.value)} />
+				<Input sx={{ mt: 4 }} fullWidth color="primary" value={input}
+							 onChange={e => setInput(e.currentTarget.value)} />
 				<Button type="submit" loading="eager">
 					{loading && <>
 						<Typography as="span" sx={{ mr: 1 }}>Načítání</Typography>
@@ -69,3 +70,5 @@ export const Chat = (props: { id: string, path: string }) => {
 		</Container>
 	);
 };
+
+export default Chat;

@@ -25,3 +25,6 @@ database_id = "" # INSERT VALUE
 binding = "S3"
 preview_bucket_name = "img-engine"
 bucket_name = "img-engine"
+
+[vars]
+OPEN_AI_KEY = ""

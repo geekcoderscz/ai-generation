@@ -30,6 +30,7 @@
 	"dependencies": {
 		"@cloudflare/ai": "^1.0.52",
 		"@tsndr/cloudflare-worker-router": "^3.2.4",
+		"openai": "^4.28.4",
 		"uuid": "^9.0.1"
 	}
 }

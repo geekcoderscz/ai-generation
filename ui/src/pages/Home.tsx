@@ -4,7 +4,8 @@ import apiClient from '../api';
 import { Button, CircularProgress, Container, Input, Typography } from '@mui/material';
 import { useState } from 'preact/hooks';
 
-export const Home = (_: { path: string }) => {
+export const Home = (props: { path: string, advanced: boolean }) => {
+	const { advanced } = props;
 	const [id] = useState(uuidv4());
 	const [input, setInput] = useState('');
 	const [img, setImg] = useState<string | null>(null);
@@ -20,7 +21,7 @@ export const Home = (_: { path: string }) => {
 			setError('');
 			const { data } = await apiClient.get('/image', {
 				params: { query: input },
-				headers: { 'X-Chat-Id': id },
+				headers: { 'X-Chat-Id': id, 'X-Advanced': advanced ? 1 : 0 },
 				responseType: 'blob'
 			});
 			const imageObjectURL = URL.createObjectURL(data);
@@ -39,7 +40,12 @@ export const Home = (_: { path: string }) => {
 			setGenerateLoading(true);
 			const { data } = await apiClient.post<{
 				response: string
-			}>('/chat', { input: 'Give me a topic in one simple sentence that could be interesting for AI generated images, it can be weird or sometimes a little unsetelling' }, { headers: { 'X-Chat-Id': id } });
+			}>('/chat', { input: 'Give me a topic in one simple phrase that could be interesting for AI generated images' }, {
+				headers: {
+					'X-Chat-Id': id,
+					'X-Advanced': advanced ? 1 : 0
+				}
+			});
 			setGenerateLoading(false);
 			setInput(data.response);
 		} catch (e) {
@@ -73,3 +79,5 @@ export const Home = (_: { path: string }) => {
 		</Container>
 	);
 };
+
+export default Home;

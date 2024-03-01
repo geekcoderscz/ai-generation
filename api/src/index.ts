@@ -3,6 +3,9 @@ import { Ai as AIModel } from '@cloudflare/ai'
 import { v4 as uuidv4 } from 'uuid'
 import { Router, RouterRequest } from '@tsndr/cloudflare-worker-router'
 import { D1Database } from '@cloudflare/workers-types'
+import { FreeAIService } from './services/ai/FreeAIService'
+import { OpenAIService } from './services/ai/OpenAIService'
+import { AIService } from './services/ai/AIService'
 
 export interface Env {
 	//
@@ -13,6 +16,7 @@ export interface Env {
 	S3: R2Bucket
 	DB: D1Database
 	AI: AIModel
+	OPEN_AI_KEY: string
 }
 
 // Request Extension
@@ -47,7 +51,12 @@ export default {
 
 async function getImage(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {
 	const db = env.DB
-	const ai = new Ai(env.AI)
+	let aiService: AIService
+	if (isAdvanced(req)) {
+		aiService = new OpenAIService(env)
+	} else {
+		aiService = new FreeAIService(env)
+	}
 	const s3 = env.S3
 
 	const { searchParams } = new URL(req.url)
@@ -57,54 +66,32 @@ async function getImage(req: RouterRequest<ExtReq>, env: Env): Promise<Response>
 		prompt: query || 'welcome image',
 	}
 
-	const response = await ai.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', inputs)
-
-	const res = new Response(response, {
-		headers: {
-			'content-type': 'image/png',
-		},
-	})
+	const response = await aiService.getImage(inputs.prompt)
 
 	const s3Id = uuidv4()
 	// Save to S3
-	await s3.put(s3Id, await res.clone().blob())
+	await s3.put(s3Id, await response.clone().blob())
 	// Save to DB
 	await db
 		.prepare('INSERT INTO images (s3Id, query, createdAt) VALUES (?1, ?2, ?3)')
 		.bind(s3Id, inputs.prompt, new Date().toISOString())
 		.run()
 
-	return res
+	return response
 }
 
 async function getChatResponse(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {
-	const ai = new Ai(env.AI)
-	const db = env.DB
-	const chatId = req.headers.get('x-chat-id') || ''
+	let aiService: AIService
+	if (isAdvanced(req)) {
+		aiService = new OpenAIService(env)
+	} else {
+		aiService = new FreeAIService(env)
+	}
 
 	const body = JSON.parse(await readRequestBody(req.raw))
 
-	const { results } = await db.prepare('SELECT input, output FROM chat WHERE chatId = ?1').bind(chatId).all()
+	const response = await aiService.getChat(req, body.input)
 
-	let string = ``
-
-	for (const item of results) {
-		string += ` I Said: ${item['input']} and you answered: ${item['output']},`
-	}
-
-	const chat = {
-		messages: [
-			{ role: 'system', content: 'You are a assistant.' },
-			{ role: 'system', content: `You remember our conversation based on this text: ${string}.` },
-			{ role: 'user', content: body.input },
-		],
-	}
-
-	const { response } = await ai.run('@hf/thebloke/llama-2-13b-chat-awq', chat)
-	await db
-		.prepare('INSERT INTO chat (chatId, input, output, createdAt) VALUES (?1, ?2, ?3, ?4)')
-		.bind(chatId, body.input, response, new Date().toISOString())
-		.run()
 	return Response.json({ response }, { headers: { 'content-type': 'application/json' } })
 }
 //
@@ -156,4 +143,9 @@ async function readRequestBody(request: Request): Promise<string> {
 		// like an image, or some other binary data.
 		return 'a file'
 	}
+}
+
+export function isAdvanced(req: RouterRequest<ExtReq>) {
+	console.log(req.headers.get('X-Advanced'))
+	return req.headers.get('X-Advanced') === '1' || false
 }
