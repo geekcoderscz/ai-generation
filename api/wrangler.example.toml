@@ -9,8 +9,8 @@ compatibility_flags = [ "nodejs_compat" ]
 mode = "smart"
 
 [[routes]]
-pattern = "ai.tomaskrcal.cloud"
-zone_name = "tomaskrcal.cloud"
+pattern = "" # INSERT VALUE
+zone_name = "" # INSERT VALUE
 custom_domain = true
 
 [ai]
@@ -23,8 +23,8 @@ database_id = "" # INSERT VALUE
 
 [[r2_buckets]]
 binding = "S3"
-preview_bucket_name = "img-engine"
-bucket_name = "img-engine"
+preview_bucket_name = "" # INSERT VALUE
+bucket_name = "" # INSERT VALUE
 
 [vars]
 OPEN_AI_KEY = ""
