@@ -3,6 +3,7 @@ import { Box, Button, Link as MLink, Toolbar, Typography, Menu as MUIMenu } from
 import MenuItem from '@mui/material/MenuItem';
 import { useTranslation } from 'react-i18next';
 import { ProviderI } from '../app.tsx';
+import { Dispatch } from 'react';
 
 const options = [
 	'cloudflare',
@@ -10,7 +11,7 @@ const options = [
 ] as const
 
 
-export const Menu = (props: { provider: ProviderI, setProvider: StateUpdater<ProviderI> }) => {
+export const Menu = (props: { provider: ProviderI, setProvider: Dispatch<StateUpdater<ProviderI>> }) => {
 	const { provider, setProvider } = props;
 	const { t } = useTranslation(['navbar']);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

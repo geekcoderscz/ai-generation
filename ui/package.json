@@ -23,7 +23,8 @@
     "preact-async-route": "^2.2.1",
     "preact-router": "^4.1.2",
     "react-i18next": "^14.1.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "wrangler": "^3.42.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
