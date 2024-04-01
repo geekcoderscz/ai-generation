@@ -15,17 +15,17 @@ export class FreeAIService implements AIService {
 	public async getChat(req: RouterRequest<ExtReq>, query: string): Promise<string> {
 		const chatId = req.headers.get('x-chat-id') || ''
 
-		const { results } = await this.db.prepare('SELECT input, output FROM chat WHERE chatId = ?1 LIMIT 5').bind(chatId).all()
-
-		let string = ``
-
-		for (const item of results) {
-			string += ` I Said: ${item['input']} and you answered: ${item['output']},`
-		}
+		// const { results } = await this.db.prepare('SELECT input, output FROM chat WHERE chatId = ?1 LIMIT 5').bind(chatId).all()
+		//
+		// let string = ``
+		//
+		// for (const item of results) {
+		// 	string += ` I Said: ${item['input']} and you answered: ${item['output']},`
+		// }
 		const chat = {
 			messages: [
 				{ role: 'system', content: 'You are a helpful assistant.' },
-				{ role: 'system', content: `context of conversation: ${string}.` },
+				// { role: 'system', content: `context of conversation: ${string}.` },
 				{ role: 'user', content: query },
 			],
 		}

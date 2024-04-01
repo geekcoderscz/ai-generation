@@ -16,18 +16,18 @@ export class OpenAIService implements AIService {
 	public async getChat(req: RouterRequest<ExtReq>, query: string): Promise<string> {
 		const chatId = req.headers.get('x-chat-id') || ''
 
-		const { results } = await this.db.prepare('SELECT input, output FROM chat WHERE chatId = ?1 LIMIT 5').bind(chatId).all()
-
-		let string = ``
-
-		for (const item of results) {
-			string += ` I said: ${item['input']} and you answered: ${item['output']},`
-		}
+		// const { results } = await this.db.prepare('SELECT input, output FROM chat WHERE chatId = ?1 LIMIT 5').bind(chatId).all()
+		//
+		// let string = ``
+		//
+		// for (const item of results) {
+		// 	string += ` I said: ${item['input']} and you answered: ${item['output']},`
+		// }
 
 		const completion = await this.ai.chat.completions.create({
 			messages: [
 				{ role: 'system', content: 'You are a helpful assistant.' },
-				{ role: 'system', content: `context of conversation: ${string}.` },
+				// { role: 'system', content: `context of conversation: ${string}.` },
 				{ role: 'user', content: query },
 			],
 			model: 'gpt-3.5-turbo',

@@ -1,36 +1,37 @@
 {
-	"name": "ai-img-engine",
-	"version": "1.0.0",
-	"private": true,
-	"scripts": {
-		"deploy": "wrangler deploy -c ./wrangler.prod.toml src/index.ts",
-		"dev": "wrangler dev --port 8000 --remote -c ./wrangler.toml src/index.ts",
-		"start": "wrangler dev src/index.ts",
-		"format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-		"lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
-		"migrate": "npx wrangler d1 execute prod-img-engine --file=./migrations/$1"
-	},
-	"eslintConfig": {
-		"root": true,
-		"extends": [
-			"typescript",
-			"prettier"
-		]
-	},
-	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240222.0",
-		"@types/uuid": "^9.0.8",
-		"eslint": "^8.21.0",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-config-typescript": "^3.0.0",
-		"prettier": "^2.7.1",
-		"typescript": "^5.0.4",
-		"wrangler": "^3.0.0"
-	},
-	"dependencies": {
-		"@cloudflare/ai": "^1.0.52",
-		"@tsndr/cloudflare-worker-router": "^3.2.4",
-		"openai": "^4.28.4",
-		"uuid": "^9.0.1"
-	}
+  "name": "ai-img-engine",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy -c ./wrangler.prod.toml src/index.ts",
+    "dev": "wrangler dev --port 8000 --remote -c ./wrangler.toml src/index.ts",
+    "start": "wrangler dev src/index.ts",
+    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
+    "migrate": "npx wrangler d1 execute prod-img-engine --file=./migrations/$1",
+    "update": "npx npm-check-updates -i"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "typescript",
+      "prettier"
+    ]
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240329.0",
+    "@types/uuid": "^9.0.8",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-typescript": "^3.0.0",
+    "prettier": "^2.7.1",
+    "typescript": "^5.4.3",
+    "wrangler": "^3.42.0"
+  },
+  "dependencies": {
+    "@cloudflare/ai": "^1.1.0",
+    "@tsndr/cloudflare-worker-router": "^3.2.4",
+    "openai": "^4.31.0",
+    "uuid": "^9.0.1"
+  }
 }
