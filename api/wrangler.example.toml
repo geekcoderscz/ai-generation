@@ -1,16 +1,16 @@
 name = "ai-img-engine"
-main = "src/index.js"
+main = "src/index.ts"
 compatibility_date = "2024-02-24"
 workers_dev = false
-account_id = "" # INSERT VALUE
+account_id = "your_account_id" # INSERT VALUE
 compatibility_flags = [ "nodejs_compat" ]
 
 [placement]
 mode = "smart"
 
 [[routes]]
-pattern = "" # INSERT VALUE
-zone_name = "" # INSERT VALUE
+pattern = "your.domain" # INSERT VALUE
+zone_name = "zone.name.from.cloudflare" # INSERT VALUE
 custom_domain = true
 
 [ai]

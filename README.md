@@ -18,36 +18,49 @@ This project is a simple web application that utilizes Cloudflare Workers for th
 ## Setup
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/project-name.git
+    git clone https://github.com/geekcoderscz/ai-generation.git
     ```
-2. Navigate to the project directory:
-    ```bash
-    cd project-name
-    ```
-3. Install dependencies for frontend:
+2. Install dependencies for frontend:
     ```bash
     cd ui
     npm install
     ```
-5. Initialize wrangler and follow the setup instructions:
+3. Install dependencies for backend:
     ```bash
-    wrangler init
+    cd api
+    npm install
     ```
-6. Build the frontend:
+4. Fill in the environment variables for frontend and backend:
     ```bash
-    npm run build
+    cd api
+    cp wrangler.example.toml wrangler.prod.toml
+    cp wrangler.example.toml wrangler.toml
+    cd ../ui
+    cp .env.production
     ```
-7. Deploy Cloudflare Workers:
+5. Deploy UI Workers:
     ```bash
-    wrangler publish
+    cd ui
+    npm run deploy
     ```
+6. Deploy Cloudflare Workers:
+    ```bash
+    cd api
+    npm run deploy
+    ```
+   
+## Frontend variables
+```VITE_API_HOST="https://YOUR_DOMAIN/api"```
+
+## Backend variables
+```OPEN_AI_KEY = "***"```
 
 ## Usage
 Once deployed, users can access the application through the provided Cloudflare Workers URL. The frontend interface allows users to interact with the backend through various actions such as fetching data or submitting forms.
 
 ## Contributing
 Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
-1. Fork the repository
+1. Pull the repository
 2. Create your feature branch (`git checkout -b feature/YourFeature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin feature/YourFeature`)
