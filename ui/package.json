@@ -8,7 +8,16 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler pages deploy ./dist",
+    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,tsx,ts}'",
+    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
     "update": "npx npm-check-updates -i"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "typescript",
+      "prettier"
+    ]
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -27,6 +36,10 @@
     "wrangler": "^3.42.0"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-typescript": "^3.0.0",
+    "prettier": "^3.2.5",
     "@preact/preset-vite": "^2.8.2",
     "typescript": "^5.4.3",
     "vite": "^5.2.7"
