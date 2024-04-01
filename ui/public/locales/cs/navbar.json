@@ -1,0 +1,11 @@
+{
+  "title": "Ai Generative Tool",
+  "dropdown": {
+    "cloudflare": "Cloudflare",
+    "openai": "Openai"
+  },
+  "menu": {
+    "images": "Fotky",
+    "chat": "Chat"
+  }
+}

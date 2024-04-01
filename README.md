@@ -29,10 +29,6 @@ This project is a simple web application that utilizes Cloudflare Workers for th
     cd ui
     npm install
     ```
-4. Install wrangler for Cloudflare Workers (if not installed):
-    ```bash
-    npm install -g @cloudflare/wrangler
-    ```
 5. Initialize wrangler and follow the setup instructions:
     ```bash
     wrangler init
@@ -58,7 +54,7 @@ Contributions are welcome! If you'd like to contribute to this project, please f
 5. Create a new Pull Request
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE.md).
 
 ## Acknowledgements
 - Thanks to Cloudflare for providing the powerful serverless platform

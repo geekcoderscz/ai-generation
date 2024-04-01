@@ -1,4 +1,9 @@
-import { render } from 'preact'
-import { App } from './app.tsx'
+import { render } from 'preact';
+import { App } from './app.tsx';
+import './i18n';
+import { Suspense } from 'preact/compat';
+import { LinearProgress } from '@mui/material';
 
-render(<App />, document.getElementById('app')!)
+render(<Suspense fallback={<LinearProgress indeterminate />}>
+	<App />
+</Suspense>, document.getElementById('app')!);

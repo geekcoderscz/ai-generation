@@ -2,17 +2,20 @@ import { Button, CircularProgress, Container, Input, Paper, Typography } from '@
 import apiClient from '../api';
 import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
+import { useTranslation } from 'react-i18next';
+import { ProviderI } from '../app.tsx';
 
 interface MessageI {
 	msg: string;
 	owner: 'me' | 'other';
 }
 
-export const Chat = (props: { id: string, path: string, advanced: boolean }) => {
-	const { id, advanced } = props;
+export const Chat = (props: { id: string, path: string, provider: ProviderI }) => {
+	const { id, provider } = props;
 	const [input, setInput] = useState('');
 	const [chat, setChat] = useState<MessageI[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
+	const { t } = useTranslation(['common']);
 
 	const askChat = async (e: JSX.TargetedSubmitEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
@@ -25,7 +28,7 @@ export const Chat = (props: { id: string, path: string, advanced: boolean }) => 
 			setChat(chat => [...chat, msg]);
 			const { data } = await apiClient.post<{
 				response: string
-			}>('/chat', { input: input }, { headers: { 'X-Chat-Id': id, 'X-Advanced': advanced ? 1 : 0 }, });
+			}>('/chat', { input: input }, { headers: { 'X-Chat-Id': id, 'X-Provider': provider } });
 			const msgResponse: MessageI = {
 				msg: data.response,
 				owner: 'other'
@@ -57,14 +60,19 @@ export const Chat = (props: { id: string, path: string, advanced: boolean }) => 
 			</Paper>}
 
 			<form onSubmit={askChat}>
-				<Input sx={{ mt: 4 }} fullWidth color="primary" value={input}
-							 onChange={e => setInput(e.currentTarget.value)} />
+				<Input
+					sx={{ mt: 4 }}
+					fullWidth
+					color="primary"
+					value={input}
+					onChange={e => setInput(e.currentTarget.value)}
+				/>
 				<Button type="submit" loading="eager">
 					{loading && <>
-						<Typography as="span" sx={{ mr: 1 }}>Načítání</Typography>
+						<Typography as="span" sx={{ mr: 1 }}>{t('common.loading')}</Typography>
 						<CircularProgress size={15} indeterminate />
 					</>}
-					{!loading && <Typography>Odeslat</Typography>}
+					{!loading && <Typography>{t('common.submit')}</Typography>}
 				</Button>
 			</form>
 		</Container>

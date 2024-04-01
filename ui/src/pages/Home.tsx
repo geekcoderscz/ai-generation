@@ -3,15 +3,18 @@ import { JSX } from 'preact';
 import apiClient from '../api';
 import { Button, CircularProgress, Container, Input, Typography } from '@mui/material';
 import { useState } from 'preact/hooks';
+import { useTranslation } from 'react-i18next';
+import { ProviderI } from '../app.tsx';
 
-export const Home = (props: { path: string, advanced: boolean }) => {
-	const { advanced } = props;
+export const Home = (props: { path: string, provider: ProviderI }) => {
+	const { provider } = props;
 	const [id] = useState(uuidv4());
 	const [input, setInput] = useState('');
 	const [img, setImg] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [generateLoading, setGenerateLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
+	const { t } = useTranslation(['common']);
 
 	const handleSubmit = async (e: JSX.TargetedSubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -21,7 +24,7 @@ export const Home = (props: { path: string, advanced: boolean }) => {
 			setError('');
 			const { data } = await apiClient.get('/image', {
 				params: { query: input },
-				headers: { 'X-Chat-Id': id, 'X-Advanced': advanced ? 1 : 0 },
+				headers: { 'X-Chat-Id': id, 'X-Provider': provider },
 				responseType: 'blob'
 			});
 			const imageObjectURL = URL.createObjectURL(data);
@@ -43,7 +46,7 @@ export const Home = (props: { path: string, advanced: boolean }) => {
 			}>('/chat', { input: 'Give me a topic in one simple phrase that could be interesting for AI generated images' }, {
 				headers: {
 					'X-Chat-Id': id,
-					'X-Advanced': advanced ? 1 : 0
+					'X-Provider': provider
 				}
 			});
 			setGenerateLoading(false);
@@ -58,17 +61,17 @@ export const Home = (props: { path: string, advanced: boolean }) => {
 	return (
 		<Container>
 			<form onSubmit={(e) => handleSubmit(e)}>
-				<Input fullWidth color="primary" value={input} onChange={e => setInput(e.currentTarget.value)} />
+				<Input sx={{ mt: 4 }} fullWidth color="primary" value={input} onChange={e => setInput(e.currentTarget.value)} />
 				<Button disabled={input === ''} type="submit" loading="eager">
 					{loading && <>
-						<Typography as="span" sx={{ mr: 1 }}>Načítání</Typography>
+						<Typography as="span" sx={{ mr: 1 }}>{t('common.loading')}</Typography>
 						<CircularProgress size={15} indeterminate />
 					</>}
-					{!loading && <Typography>Generovat</Typography>}
+					{!loading && <Typography>{t('common.generate')}</Typography>}
 				</Button>
 
 				<Button onClick={handleGenerate} type="button" loading="eager">
-					<Typography>Doporučit</Typography>
+					<Typography>{t('common.suggest')}</Typography>
 					{generateLoading && <CircularProgress sx={{ ml: 1 }} size={15} indeterminate />}
 				</Button>
 			</form>

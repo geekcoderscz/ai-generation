@@ -1,7 +1,7 @@
 {
   "name": "ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,9 +15,13 @@
     "@mui/material": "^5.15.11",
     "@types/uuid": "^9.0.8",
     "axios": "^1.6.7",
+    "i18next": "^23.10.1",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "i18next-http-backend": "^2.5.0",
     "preact": "^10.19.5",
     "preact-async-route": "^2.2.1",
     "preact-router": "^4.1.2",
+    "react-i18next": "^14.1.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-import { Ai } from './vendor/@cloudflare/ai.js'
 import { Ai as AIModel } from '@cloudflare/ai'
 import { v4 as uuidv4 } from 'uuid'
 import { Router, RouterRequest } from '@tsndr/cloudflare-worker-router'
@@ -6,6 +5,8 @@ import { D1Database } from '@cloudflare/workers-types'
 import { FreeAIService } from './services/ai/FreeAIService'
 import { OpenAIService } from './services/ai/OpenAIService'
 import { AIService } from './services/ai/AIService'
+
+export type ProviderI = 'cloudflare' | 'openai'
 
 export interface Env {
 	//
@@ -52,7 +53,7 @@ export default {
 async function getImage(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {
 	const db = env.DB
 	let aiService: AIService
-	if (isAdvanced(req)) {
+	if (getProvider(req) === 'openai') {
 		aiService = new OpenAIService(env)
 	} else {
 		aiService = new FreeAIService(env)
@@ -82,7 +83,7 @@ async function getImage(req: RouterRequest<ExtReq>, env: Env): Promise<Response>
 
 async function getChatResponse(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {
 	let aiService: AIService
-	if (isAdvanced(req)) {
+	if (getProvider(req) === 'openai') {
 		aiService = new OpenAIService(env)
 	} else {
 		aiService = new FreeAIService(env)
@@ -94,6 +95,7 @@ async function getChatResponse(req: RouterRequest<ExtReq>, env: Env): Promise<Re
 
 	return Response.json({ response }, { headers: { 'content-type': 'application/json' } })
 }
+
 //
 // async function getRPGChat(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {
 // 	const responses = []
@@ -145,7 +147,6 @@ async function readRequestBody(request: Request): Promise<string> {
 	}
 }
 
-export function isAdvanced(req: RouterRequest<ExtReq>) {
-	console.log(req.headers.get('X-Advanced'))
-	return req.headers.get('X-Advanced') === '1' || false
+export function getProvider(req: RouterRequest<ExtReq>): ProviderI {
+	return req.headers.get('X-Provider') as ProviderI
 }

@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy -c ./wrangler.prod.toml src/index.ts",
-		"dev": "wrangler dev --remote -c ./wrangler.toml src/index.ts",
+		"dev": "wrangler dev --port 8000 --remote -c ./wrangler.toml src/index.ts",
 		"start": "wrangler dev src/index.ts",
 		"format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
 		"lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
