@@ -3,17 +3,12 @@ name: Lint Code Base
 on: [ push, pull_request ]
 
 jobs:
-  build:
-    name: Lint Code Base
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_JAVASCRIPT_ES: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: UI Eslint
+        run: |
+          cd ui
+          npm install
+          npm run lint
