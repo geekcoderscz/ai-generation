@@ -22,15 +22,29 @@ jobs:
             ${{ runner.os }}-
 
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
+        name: UI List the state of node modules
         working-directory: ui
         continue-on-error: true
         run: npm list
 
-      - name: Install dependencies
+      - name: UI - Install dependencies
         working-directory: ui
         run: npm install
 
-      - name: Lint
+      - name: UI - Lint
         working-directory: ui
+        run: npm run lint
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: API List the state of node modules
+        working-directory: api
+        continue-on-error: true
+        run: npm list
+
+      - name: API - Install dependencies
+        working-directory: api
+        run: npm install
+
+      - name: API - Lint
+        working-directory: api
         run: npm run lint
