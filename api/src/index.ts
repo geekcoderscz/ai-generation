@@ -18,6 +18,8 @@ export interface Env {
 	DB: D1Database
 	AI: AIModel
 	OPEN_AI_KEY: string
+	OPEN_AI_ENABLED: boolean
+	CLOUDFLARE_AI_ENABLED: boolean
 }
 
 // Request Extension
@@ -34,6 +36,11 @@ const router = new Router<Env, ExtCtx, ExtReq>()
 
 router.cors({ allowOrigin: '*', allowMethods: 'GET,HEAD,POST,OPTIONS', maxAge: 86400 })
 
+// GET Providers
+router.get('/api/providers', ({ env }) => {
+	return getProviders(env)
+})
+
 // GET Image
 router.get('/api/image', ({ req, env }) => {
 	return getImage(req, env)
@@ -48,6 +55,13 @@ export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		return router.handle(request, env, ctx)
 	},
+}
+
+async function getProviders(env: Env): Promise<Response> {
+	const cloudflare = env.CLOUDFLARE_AI_ENABLED
+	const openai = env.OPEN_AI_ENABLED
+
+	return Response.json({ openai, cloudflare }, { headers: { 'content-type': 'application/json' } })
 }
 
 async function getImage(req: RouterRequest<ExtReq>, env: Env): Promise<Response> {

@@ -27,4 +27,6 @@ preview_bucket_name = "" # INSERT VALUE
 bucket_name = "" # INSERT VALUE
 
 [vars]
+CLOUDFLARE_AI_ENABLED = true
 OPEN_AI_KEY = ""
+OPEN_AI_ENABLED = false

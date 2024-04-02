@@ -6,11 +6,16 @@ import { ProviderI } from '../app.tsx'
 import { Dispatch } from 'preact/compat'
 // @ts-expect-error Import from source since there is no other way
 import { MouseEventHandler } from 'preact/src/jsx'
+import { GetProvidersResponse } from '../interface/ApiResponse.ts'
 
 const options = ['cloudflare', 'openai'] as const
 
-export const Menu = (props: { provider: ProviderI; setProvider: Dispatch<StateUpdater<ProviderI>> }) => {
-	const { provider, setProvider } = props
+export const Menu = (props: {
+	provider: ProviderI
+	setProvider: Dispatch<StateUpdater<ProviderI>>
+	availableProviders?: GetProvidersResponse
+}) => {
+	const { provider, setProvider, availableProviders } = props
 	const { t } = useTranslation(['navbar'])
 	const [anchorEl, setAnchorEl] = useState<null | HTMLAnchorElement>(null)
 	const open = Boolean(anchorEl)
@@ -42,19 +47,23 @@ export const Menu = (props: { provider: ProviderI; setProvider: Dispatch<StateUp
 						>
 							{provider}
 						</Button>
-						<MUIMenu
-							id="fade-menu"
-							MenuListProps={{
-								'aria-labelledby': 'fade-button',
-							}}
-							anchorEl={anchorEl}
-							open={open}
-							onClose={() => handleClose()}
-						>
-							{options.map((option) => (
-								<MenuItem onClick={() => handleClose(option)}>{option}</MenuItem>
-							))}
-						</MUIMenu>
+						{availableProviders && (
+							<MUIMenu
+								id="fade-menu"
+								MenuListProps={{
+									'aria-labelledby': 'fade-button',
+								}}
+								anchorEl={anchorEl}
+								open={open}
+								onClose={() => handleClose()}
+							>
+								{options.map((option) => (
+									<MenuItem disabled={!availableProviders[option]} onClick={() => handleClose(option)}>
+										{option}
+									</MenuItem>
+								))}
+							</MUIMenu>
+						)}
 					</>
 				</Typography>
 				<Box sx={{ display: { xs: 'block', sm: 'block' } }}>
