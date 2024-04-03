@@ -41,19 +41,33 @@ This project is a simple web application that utilizes Cloudflare Workers for th
 5. Deploy UI Workers:
     ```bash
     cd ui
-    npm run deploy
+    npm run deploy:cf
     ```
 6. Deploy Cloudflare Workers:
     ```bash
     cd api
-    npm run deploy
+    npm run deploy:cf
+    ```
+7. Migrate D1 Cloudflare Database:
+    ```bash
+    cd api
+    npx wrangler d1 execute prod-img-engine --file=./migrations/01.sql
+    npx wrangler d1 execute prod-img-engine --file=./migrations/02.sql
     ```
    
 ## Frontend variables
+File `ui/.env`
+
 ```VITE_API_HOST="https://YOUR_DOMAIN/api"```
 
 ## Backend variables
+File `api/wrangler.toml`
+
 ```OPEN_AI_KEY = "***"```
+
+```OPENAI_AI_ENABLED = false```
+
+```CLOUDFLARE_AI_ENABLED = true```
 
 ## Usage
 Once deployed, users can access the application through the provided Cloudflare Workers URL. The frontend interface allows users to interact with the backend through various actions such as fetching data or submitting forms.
