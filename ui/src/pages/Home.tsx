@@ -6,7 +6,7 @@ import { useState } from 'preact/hooks'
 import { useTranslation } from 'react-i18next'
 import { ProviderI } from '../app.tsx'
 
-export const Home = (props: { path: string; provider: ProviderI }) => {
+export const Home = (props: { provider: ProviderI }) => {
 	const { provider } = props
 	const [id] = useState(uuidv4())
 	const [input, setInput] = useState('')

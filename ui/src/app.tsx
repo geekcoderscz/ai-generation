@@ -1,16 +1,15 @@
 import './app.css'
-import { lazy, Suspense, useEffect } from 'preact/compat'
+import { lazy, useEffect } from 'preact/compat'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './theme.ts'
 import { JSX } from 'preact'
-import { AppBar, Box, LinearProgress, ThemeProvider } from '@mui/material'
-import Router from 'preact-router'
+import { AppBar, Box, ThemeProvider } from '@mui/material'
 import { useState } from 'preact/hooks'
 import { v4 as uuidv4 } from 'uuid'
-import AsyncRoute from 'preact-async-route'
 import Menu from './components/Menu.tsx'
 import apiClient from './api'
 import { GetProvidersResponse } from './interface/ApiResponse.ts'
+import { Route, Switch } from 'react-router-dom'
 
 const Home = lazy(() => import('./pages/Home'))
 const Chat = lazy(() => import('./pages/Chat'))
@@ -38,15 +37,14 @@ export function App(): JSX.Element {
 				<Menu availableProviders={availableProviders} provider={provider} setProvider={setProvider} />
 			</AppBar>
 			<Box component="main" sx={{ mt: 8 }}>
-				<Router>
-					<Suspense path="/" fallback={<LinearProgress indeterminate />}>
-						<Home provider={provider} path="/" />
-					</Suspense>
-
-					<Suspense path="/chat" fallback={<LinearProgress indeterminate />}>
-						<AsyncRoute path="/chat" component={Chat} provider={provider} id={id} />
-					</Suspense>
-				</Router>
+				<Switch>
+					<Route exact path="/">
+						<Home provider={provider} />
+					</Route>
+					<Route path="/chat">
+						<Chat id={id} provider={provider} />
+					</Route>
+				</Switch>
 			</Box>
 		</ThemeProvider>
 	)

@@ -20,7 +20,9 @@ i18n
 		fallbackLng: 'en',
 		debug: false,
 		nsSeparator: '.',
-
+		backend: {
+			loadPath: import.meta.env.VITE_GH_ENV === 'true' ? `/ai-generation/locales/{{lng}}/{{ns}}.json` : `/locales/{{lng}}/{{ns}}.json`,
+		},
 		interpolation: {
 			escapeValue: false, // not needed for react as it escapes by default
 		},

@@ -37,17 +37,17 @@ const router = new Router<Env, ExtCtx, ExtReq>()
 router.cors({ allowOrigin: '*', allowMethods: 'GET,HEAD,POST,OPTIONS', maxAge: 86400 })
 
 // GET Providers
-router.get('/api/providers', ({ env }) => {
+router.get('/:provider/providers', ({ env }) => {
 	return getProviders(env)
 })
 
 // GET Image
-router.get('/api/image', ({ req, env }) => {
+router.get('/:provider/image', ({ req, env }) => {
 	return getImage(req, env)
 })
 
 // POST Chat
-router.post('/api/chat', ({ req, env }) => {
+router.post('/:provider/chat', ({ req, env }) => {
 	return getChatResponse(req, env)
 })
 

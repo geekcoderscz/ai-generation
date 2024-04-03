@@ -10,7 +10,7 @@ interface MessageI {
 	owner: 'me' | 'other'
 }
 
-export const Chat = (props: { id: string; path: string; provider: ProviderI }) => {
+export const Chat = (props: { id: string; provider: ProviderI }) => {
 	const { id, provider } = props
 	const [input, setInput] = useState('')
 	const [chat, setChat] = useState<MessageI[]>([])

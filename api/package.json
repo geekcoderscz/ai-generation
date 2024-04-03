@@ -1,9 +1,10 @@
 {
   "name": "ai-img-engine",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy -c ./wrangler.prod.toml src/index.ts",
+    "deploy:cf": "wrangler deploy -c ./wrangler.prod.toml src/index.ts",
+    "deploy:gh": "wrangler deploy -c ./wrangler.prod.gh.toml src/index.ts",
     "dev": "wrangler dev --port 8000 --remote -c ./wrangler.toml src/index.ts",
     "start": "wrangler dev src/index.ts",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}'",

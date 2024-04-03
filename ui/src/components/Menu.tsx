@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useTranslation } from 'react-i18next'
 import { ProviderI } from '../app.tsx'
 import { Dispatch } from 'preact/compat'
+import { Link } from 'react-router-dom'
 // @ts-expect-error Import from source since there is no other way
 import { MouseEventHandler } from 'preact/src/jsx'
 import { GetProvidersResponse } from '../interface/ApiResponse.ts'
@@ -67,10 +68,14 @@ export const Menu = (props: {
 					</>
 				</Typography>
 				<Box sx={{ display: { xs: 'block', sm: 'block' } }}>
-					<MLink sx={{ mr: 2 }} href="/">
+					{/*
+						// @ts-expect-error SX props don't work */}
+					<Link component={MLink} sx={{ mr: 2 }} to="/">
 						{t('navbar.menu.images')}
-					</MLink>
-					<MLink href="/chat">{t('navbar.menu.chat')}</MLink>
+					</Link>
+					<Link component={MLink} to="/chat">
+						{t('navbar.menu.chat')}
+					</Link>
 				</Box>
 			</Toolbar>
 		</div>
