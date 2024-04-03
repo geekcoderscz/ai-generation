@@ -3,6 +3,15 @@
 ## Overview
 This project is a simple web application that utilizes Cloudflare Workers for the backend and Preact for the frontend. Cloudflare Workers provide serverless compute environments that enable developers to deploy code at the edge of Cloudflare's network, closer to users, which can significantly improve performance and reduce latency. Preact, a lightweight alternative to React, is used for building fast and efficient user interfaces.
 
+Image Generation
+![UI Image Showcase](./images/image1.png)
+
+Chat
+![UI Chat Showcase](./images/image2.png)
+
+Multiple providers
+![UI Provider Dropdown Showcase](./images/image3.png)
+
 ## Features
 - Serverless backend powered by Cloudflare Workers
 - Lightweight and efficient frontend built with Preact
