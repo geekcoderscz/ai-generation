@@ -1,5 +1,5 @@
 import { AIService } from './AIService'
-import { Ai } from '../../vendor/@cloudflare/ai.js'
+import { Ai } from '@cloudflare/ai'
 import { Env, ExtReq } from '../../index'
 import { RouterRequest } from '@tsndr/cloudflare-worker-router'
 
@@ -30,7 +30,7 @@ export class FreeAIService implements AIService {
 			],
 		}
 
-		const { response } = await this.ai.run('@hf/thebloke/openchat_3.5-awq', chat)
+		const { response } = (await this.ai.run('@hf/thebloke/openchat_3.5-awq', chat)) as { response: string }
 
 		await this.db
 			.prepare('INSERT INTO chat (chatId, input, output, createdAt) VALUES (?1, ?2, ?3, ?4)')
@@ -44,7 +44,7 @@ export class FreeAIService implements AIService {
 		const prompt = {
 			prompt: input || 'welcome image',
 		}
-		const response = await this.ai.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', prompt)
+		const response = await this.ai.run('@cf/bytedance/stable-diffusion-xl-lightning', prompt)
 		return new Response(response, {
 			headers: {
 				'content-type': 'image/png',
