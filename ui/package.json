@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc && vite build --mode $MODE",
     "build:gh": "MODE=ghproduction NODE_ENV=production npm run build",
+    "build:cf": "MODE=production NODE_ENV=production npm run build",
     "preview": "vite preview",
     "predeploy:cf": "MODE=production NODE_ENV=production npm run build",
     "deploy:cf": "wrangler pages deploy ./dist",
