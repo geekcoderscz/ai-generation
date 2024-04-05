@@ -28,7 +28,7 @@ jobs:
 
       - name: UI - Install dependencies
         working-directory: ui
-        run: npm install
+        run: npm ci
 
       - name: Run Build
         working-directory: ui
