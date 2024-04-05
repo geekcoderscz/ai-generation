@@ -1,4 +1,3 @@
-import './app.css'
 import { lazy, useEffect } from 'preact/compat'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './theme.ts'
