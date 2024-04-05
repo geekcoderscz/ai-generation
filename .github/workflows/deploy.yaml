@@ -11,6 +11,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Run Build
         working-directory: ui
         run: npm run build:gh
