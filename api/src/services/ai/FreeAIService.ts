@@ -30,7 +30,7 @@ export class FreeAIService implements AIService {
 			],
 		}
 
-		const { response } = await this.ai.run('@hf/thebloke/llama-2-13b-chat-awq', chat)
+		const { response } = await this.ai.run('@hf/thebloke/openchat_3.5-awq', chat)
 
 		await this.db
 			.prepare('INSERT INTO chat (chatId, input, output, createdAt) VALUES (?1, ?2, ?3, ?4)')
