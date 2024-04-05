@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Run Build
         working-directory: ui
-        run: npm run build
+        run: npm run build:gh
 
       - name: Setup Pages
         if: github.ref == 'refs/heads/main'
